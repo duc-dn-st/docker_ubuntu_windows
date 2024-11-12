@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  ros-master:
+    image: ros:noetic-ros-core
+    container_name: ros-master
+    command: stdbuf -o L roscore
+    network_mode: host
+    
+  docker_ubuntu_windows:
+    user: root
+    depends_on: 
+      - ros-master
+    image: docker_ubuntu_windows:windows
+    build:
+      context: ..
+      dockerfile: ./docker_ubuntu_windows/Dockerfile.windows
+    container_name: docker_ubuntu_windows
+    volumes:
+      - "../:/root/catkin_ws/src/"
+    privileged: True
+    network_mode: host
+    tty: True
+    stdin_open: True
+    command: bash
